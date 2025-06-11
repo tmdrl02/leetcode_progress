@@ -8,6 +8,7 @@ export const useProblemStore = create((set, get) => ({
   problems:[],
   loading:false,
   error:null,
+  currentProblem: null,
 
   formData : {
     title: "",
@@ -70,4 +71,35 @@ export const useProblemStore = create((set, get) => ({
     }
   },
 
+  fetchProblem: async (id) => {
+    set({ loading: true});
+    try {
+      const response = await axios.get(`${BASE_URL}/api/problems/${id}`);
+      set({ currentProblem: response.data.data,
+        formData: response.data.data,
+        error: null
+      });
+    } catch (error) {
+      console.log("Failed to fetch problem:", error);
+      set({ error: "Failed to fetch problem. Please try again later.", currentProblem: null });
+
+    } finally {
+      set({ loading: false });
+    }
+  },
+  updateProblem: async (id, formData) => {
+    set({ loading: true });
+    try {
+      const {formData} = get();
+      const response = await axios.put(`${BASE_URL}/api/problems/${id}`, formData);
+      set({ currentProblem: response.data.data });
+      toast.success("Problem updated successfully!");
+    } catch (error) {
+      console.log("Failed to update problem:", error);
+      toast.error("Something went wrong while updating the problem.");
+    } finally {
+      set({ loading: false });
+    }
+  }
+  
 }));
