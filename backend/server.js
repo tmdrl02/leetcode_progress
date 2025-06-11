@@ -4,6 +4,7 @@ import morgan from "morgan";
 import cors from "cors";
 import dotenv from "dotenv";
 import { sql } from "./config/db.js"; // Import the SQL connection
+import { aj } from "./lib/arcjet.js";
 
 import problemRoutes from "./routes/problemRoutes.js";
 
